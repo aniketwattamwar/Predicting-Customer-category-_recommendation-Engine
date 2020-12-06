@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np 
 import streamlit as st
 from sklearn.model_selection import train_test_split
+from matplotlib import pyplot as plt 
+
 
 st.title('Predicting Customer Category | Recommendation Engine')
 st.header('Hackerearth Challenge')
@@ -17,8 +19,23 @@ def load_test_data():
     return test_data
 
 
+
+
+
 train_data = load_train_data()
 test_data  = load_test_data()
+
+
+st.write('If you look at the below graph you can see that the customer visiting score to customer  search score and order score,'
++ ' we can conclude the buying capacity of the customers is low')
+chart_data = pd.DataFrame(train_data[:50],columns = ['customer_product_search_score','customer_visit_score','customer_order_score'])
+st.bar_chart(chart_data, use_container_width = True)
+
+
+st.write('The below graph tells us that considerable customers have high visit and affinity score')
+chart_data = pd.DataFrame(train_data[:50],columns = ['customer_affinity_score','customer_visit_score'])
+st.area_chart(chart_data, use_container_width = True)
+
 y = train_data.iloc[:,11].values
 st.text('Training Data')
 st.write(train_data)
@@ -41,6 +58,8 @@ X = train_data.iloc[:,:]
 
 X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size = 0.2, random_state = 0)
 
+st.subheader('Correlation Matrix')
+st.write(train_data.corr())
 
 st.write('Splitting the data set into train and validation set to check the accuracy.')
 
